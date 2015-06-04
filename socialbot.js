@@ -46,7 +46,7 @@ module.exports = (function() {
             fulfill(friends);
           } else {
             con.log("rejected no friends...")
-            reject([]);
+            reject("NO_FRIENDS");
           }
         }
       })
