@@ -10,7 +10,7 @@ module.exports = (function() {
 
   function initClient(authsettings) {
     if (client) return client;
-    con.log("initialising client");
+    // con.log("initialising client");
     client = new Twitter(authsettings);
     // con.log("client", client)
     return client;
@@ -23,7 +23,7 @@ module.exports = (function() {
         con.log("get followers error:", error);
       } else {
         var followers = reply.ids; //, randFollower = randIndex(followers);
-        con.log('get followers good', followers)
+        // con.log('get followers good', followers)
         // getFriends(randFollower);
       }
     })
@@ -37,12 +37,12 @@ module.exports = (function() {
       var param = user_id ? { user_id: user_id } : {};
       client.get('friends/ids', param, function(error, reply) {
         if (error) {
-          con.log("get friend ids", error);
+          // con.log("get friend ids", error);
           reject(error);
         } else {
           var friends = reply.ids;
           if (friends.length) {
-            con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
+            // con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
             fulfill(friends);
           } else {
             con.log("rejected no friends...")
@@ -66,7 +66,7 @@ module.exports = (function() {
               // con.log("=====================================");
               // con.log("followFriend fulfill response", response);
               // con.log("=====================================");
-              con.log("followFriend fulfill name:", response.name, "location:", response.location, "description:", response.description, "url:", response.url);
+              // con.log("followFriend fulfill name:", response.name, "location:", response.location, "description:", response.description, "url:", response.url);
               fulfill(response);
             }
           });
@@ -86,14 +86,14 @@ module.exports = (function() {
   function postMedia(image) {
     return new Promise(function(fulfill, reject) {
 
-      con.log("postMedia", image);
+      // con.log("postMedia", image);
       hits ++;
       if (hits > 2) {
-        con.log("too many hits!");
+        // con.log("too many hits!");
         reject(new Error("more than 5 hits!"));
       }
 
-      con.log("trying client.post!");
+      // con.log("trying client.post!");
       try {
 
         client.post("media/upload", {media: image}, function(error, media, response){
@@ -101,7 +101,7 @@ module.exports = (function() {
             con.log("postMedia reject 01", error);
             reject(error);
           } else {
-            con.log("postMedia fulfill!");
+            // con.log("postMedia fulfill!");
             fulfill(media);
           }
         });
@@ -116,14 +116,14 @@ module.exports = (function() {
 
   function postTweet(status) {
     return new Promise(function(fulfill, reject) {
-      con.log("postTweet media success", status);
+      // con.log("postTweet media success", status);
       try {
         client.post("statuses/update", status, function(error, tweet, response){
           if (error) {
             con.log("postTweet reject 02", error);
             reject(error);
           } else {
-            con.log("postTweet fulfill");
+            // con.log("postTweet fulfill");
             fulfill(tweet);
           }
         });
