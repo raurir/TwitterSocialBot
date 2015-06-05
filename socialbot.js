@@ -54,7 +54,7 @@ module.exports = (function() {
   }
 
   function followFriend(user_id) {
-    con.log("followFriend attempt", user_id);
+    // con.log("followFriend attempt", user_id);
     return new Promise(function(fulfill, reject) {
       if (user_id) {
         try {
