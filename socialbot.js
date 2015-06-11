@@ -18,31 +18,35 @@ module.exports = (function() {
 
 
   function getFollowers() {
-    client.get('followers/ids', function(error, reply) {
-      if (error) {
-        con.log("get followers error:", error);
-      } else {
-        var followers = reply.ids; //, randFollower = randIndex(followers);
-        // con.log('get followers good', followers)
-        // getFriends(randFollower);
-      }
-    })
+    // con.log("getFollowers");
+    return new Promise(function(fulfill, reject) {
+      client.get('followers/ids', function(error, reply) {
+        if (error) {
+          // con.log("getFollowers error:", error);
+          reject(error);
+        } else {
+          // con.log("getFollowers success:", reply);
+          fulfill(reply);
+          // var followers = reply.ids; //, randFollower = randIndex(followers);
+        }
+      });
+    });
   }
 
 
 
   function getFriends(user_id) {
-    // con.log("getFriends", user_id);
+    con.log("getFriends", user_id);
     return new Promise(function(fulfill, reject) {
       var param = user_id ? { user_id: user_id } : {};
       client.get('friends/ids', param, function(error, reply) {
         if (error) {
-          // con.log("get friend ids", error);
+          con.log("get friend ids", error);
           reject(error);
         } else {
           var friends = reply.ids;
           if (friends.length) {
-            // con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
+            con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
             fulfill(friends);
           } else {
             con.log("rejected no friends...")
