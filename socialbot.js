@@ -38,6 +38,7 @@ module.exports = (function() {
   function getFriends(user_id) {
     con.log("getFriends", user_id);
     return new Promise(function(fulfill, reject) {
+      // con.log("getFriends inside promise", user_id);
       var param = user_id ? { user_id: user_id } : {};
       client.get('friends/ids', param, function(error, reply) {
         if (error) {
@@ -46,7 +47,7 @@ module.exports = (function() {
         } else {
           var friends = reply.ids;
           if (friends.length) {
-            con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
+            // con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
             fulfill(friends);
           } else {
             con.log("rejected no friends...")
@@ -80,7 +81,7 @@ module.exports = (function() {
         }
       } else {
         con.log("followFriend no friend to follow!");
-        fulfill(null);
+        reject(null);
       }
     });
   }
