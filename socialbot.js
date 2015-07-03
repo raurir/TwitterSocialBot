@@ -35,26 +35,31 @@ module.exports = (function() {
 
 
 
-  function getFriends(user_id) {
-    con.log("getFriends", user_id);
+  function getFollowing(user_id) {
+    con.log("getFollowing", user_id);
     return new Promise(function(fulfill, reject) {
-      // con.log("getFriends inside promise", user_id);
-      var param = user_id ? { user_id: user_id } : {};
-      client.get('friends/ids', param, function(error, reply) {
-        if (error) {
-          con.log("get friend ids", error);
-          reject(error);
-        } else {
-          var friends = reply.ids;
-          if (friends.length) {
-            // con.log("getFriends of", user_id, friends.length);//, friends.join(" / "));
-            fulfill(friends);
+      try {
+        con.log("getFollowing inside promise", user_id);
+        var param = user_id ? { user_id: user_id } : {};
+        client.get('friends/ids', param, function(error, reply) {
+          if (error) {
+            con.log("get friend ids", error);
+            reject(error);
           } else {
-            con.log("rejected no friends...")
-            reject("NO_FRIENDS");
+            var friends = reply.ids;
+            if (friends.length) {
+              con.log("getFollowing of", user_id, friends.length);//, friends.join(" / "));
+              fulfill(friends);
+            } else {
+              con.log("rejected no friends...")
+              reject("NO_FRIENDS");
+            }
           }
-        }
-      })
+        })
+      } catch(err) { 
+        con.log("getFollowing err", err);
+        reject();
+      }
     })
   }
 
@@ -81,6 +86,32 @@ module.exports = (function() {
         }
       } else {
         con.log("followFriend no friend to follow!");
+        reject(null);
+      }
+    });
+  }
+
+
+  function unfollowFriend(user_id) {
+    con.log("unfollowFriend", user_id);
+    return new Promise(function(fulfill, reject) {
+      if (user_id) {
+        try {
+          client.post('friendships/destroy', {id: user_id}, function(error, response) {
+            if (error) {
+              con.log("unfollowFriend error 01", error);
+              reject(error);
+            } else {
+              // con.log("unfollowFriend fulfill response", response);
+              fulfill(user_id);
+            }
+          });
+        } catch(e) {
+          con.log("unfollowFriend error 02", e);
+          reject(e);
+        }
+      } else {
+        con.log("unfollowFriend no friend to follow!");
         reject(null);
       }
     });
@@ -139,15 +170,14 @@ module.exports = (function() {
     })
   }
 
-
-
   return {
-    // randIndex: randIndex,
     followFriend: followFriend,
     getFollowers: getFollowers,
-    getFriends: getFriends,
+    getFollowing: getFollowing, // used to be getFriends!
+    getFriends: function() { con.warn('deprecated! use getFollowing')},
     initClient: initClient,
     postMedia: postMedia,
     postTweet: postTweet,
+    unfollowFriend: unfollowFriend,
   }
 })();
