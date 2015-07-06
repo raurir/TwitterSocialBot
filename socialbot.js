@@ -93,7 +93,7 @@ module.exports = (function() {
 
 
   function unfollowFriend(user_id) {
-    con.log("unfollowFriend", user_id);
+    // con.log("unfollowFriend", user_id);
     return new Promise(function(fulfill, reject) {
       if (user_id) {
         try {
@@ -102,6 +102,7 @@ module.exports = (function() {
               con.log("unfollowFriend error 01", error);
               reject(error);
             } else {
+              con.log("unfollowFriend success");
               // con.log("unfollowFriend fulfill response", response);
               fulfill(user_id);
             }
