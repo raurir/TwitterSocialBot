@@ -17,6 +17,21 @@ module.exports = (function() {
   }
 
 
+  function getUser(user_id) {
+    con.log("Socialbot getUser", user_id);
+    return new Promise(function(fulfill, reject) {
+      client.get('users/show', {user_id: user_id}, function(error, reply) {
+        if (error) {
+          reject(error);
+        } else {
+          fulfill(reply);
+        }
+      });
+    });
+  }
+
+
+
   function getFollowers() {
     // con.log("getFollowers");
     return new Promise(function(fulfill, reject) {
@@ -56,7 +71,7 @@ module.exports = (function() {
             }
           }
         })
-      } catch(err) { 
+      } catch(err) {
         con.log("getFollowing err", err);
         reject();
       }
@@ -123,14 +138,15 @@ module.exports = (function() {
   function postMedia(image) {
     return new Promise(function(fulfill, reject) {
 
-      // con.log("postMedia", image);
+      con.log("postMedia", image);
+
       hits ++;
       if (hits > 2) {
         // con.log("too many hits!");
         reject(new Error("more than 5 hits!"));
       }
 
-      // con.log("trying client.post!");
+      con.log("trying client.post!", client);
       try {
 
         client.post("media/upload", {media: image}, function(error, media, response){
@@ -176,6 +192,7 @@ module.exports = (function() {
     getFollowers: getFollowers,
     getFollowing: getFollowing, // used to be getFriends!
     getFriends: function() { con.warn('deprecated! use getFollowing')},
+    getUser: getUser, 
     initClient: initClient,
     postMedia: postMedia,
     postTweet: postTweet,
