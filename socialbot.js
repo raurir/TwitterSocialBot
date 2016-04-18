@@ -78,6 +78,37 @@ module.exports = (function() {
     })
   }
 
+  function getTweets(user_id, count) {
+    con.log("getTweets attempt", user_id);
+    return new Promise(function(fulfill, reject) {
+      if (user_id) {
+        try {
+          var param = {id: user_id};
+          if (count) param.count = count;
+          client.get('statuses/user_timeline', param, function(error, response) {
+            if (error) {
+              con.log("getTweets error 01", error);
+              reject(error);
+            } else {
+              // con.log("=====================================");
+              // con.log("followFriend fulfill response", response);
+              // con.log("=====================================");
+              // con.log("followFriend fulfill name:", response.name, "location:", response.location, "description:", response.description, "url:", response.url);
+              fulfill(response);
+            }
+          });
+        } catch(err) {
+          con.log("getTweets error 02", err);
+          reject(err);
+        }
+      } else {
+        con.log("getTweets error 03 no user id!");
+        reject(null);
+      }
+    });
+  }
+
+
   function followFriend(user_id) {
     // con.log("followFriend attempt", user_id);
     return new Promise(function(fulfill, reject) {
@@ -191,7 +222,8 @@ module.exports = (function() {
     followFriend: followFriend,
     getFollowers: getFollowers,
     getFollowing: getFollowing, // used to be getFriends!
-    getFriends: function() { con.warn('deprecated! use getFollowing')},
+    getFriends: function() { con.warn('getFriends deprecated! use getFollowing')},
+    getTweets: getTweets,
     getUser: getUser, 
     initClient: initClient,
     postMedia: postMedia,
