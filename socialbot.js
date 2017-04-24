@@ -17,10 +17,10 @@ module.exports = (function() {
   }
 
 
-  function getUser(user_id) {
-    con.log("Socialbot getUser", user_id);
+  function getUserFromId(user_id) {
+    con.log("Socialbot getUserFromId", user_id);
     return new Promise(function(fulfill, reject) {
-      client.get('users/show', {user_id: user_id}, function(error, reply) {
+      client.get('users/show', {user_id}, function(error, reply) {
         if (error) {
           reject(error);
         } else {
@@ -30,7 +30,18 @@ module.exports = (function() {
     });
   }
 
-
+  function getUserFromName(screen_name) {
+    con.log("Socialbot getUserFromName", screen_name);
+    return new Promise(function(fulfill, reject) {
+      client.get('users/show', {screen_name}, function(error, reply) {
+        if (error) {
+          reject(error);
+        } else {
+          fulfill(reply);
+        }
+      });
+    });
+  }
 
   function getFollowers() {
     // con.log("getFollowers");
@@ -78,14 +89,12 @@ module.exports = (function() {
     })
   }
 
-  function getTweets(user_id, count) {
-    con.log("getTweets attempt", user_id);
+  function getTweets(params) {
+    con.log("SocialBot.getTweets attempt", params);
     return new Promise(function(fulfill, reject) {
-      if (user_id) {
+      if (params.id || params.screen_name) {
         try {
-          var param = {id: user_id};
-          if (count) param.count = count;
-          client.get('statuses/user_timeline', param, function(error, response) {
+          client.get('statuses/user_timeline', params, function(error, response) {
             if (error) {
               con.log("getTweets error 01", error);
               reject(error);
@@ -98,11 +107,11 @@ module.exports = (function() {
             }
           });
         } catch(err) {
-          con.log("getTweets error 02", err);
+          con.log("SocialBot.getTweets error 02", err);
           reject(err);
         }
       } else {
-        con.log("getTweets error 03 no user id!");
+        con.log("SocialBot.getTweets error 03 no user id!");
         reject(null);
       }
     });
@@ -224,7 +233,8 @@ module.exports = (function() {
     getFollowing: getFollowing, // used to be getFriends!
     getFriends: function() { con.warn('getFriends deprecated! use getFollowing')},
     getTweets: getTweets,
-    getUser: getUser, 
+    getUserFromId,
+    getUserFromName,
     initClient: initClient,
     postMedia: postMedia,
     postTweet: postTweet,
