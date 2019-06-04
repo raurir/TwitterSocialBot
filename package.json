@@ -1,0 +1,31 @@
+{
+  "name": "twittersocialbot",
+  "version": "1.0.1",
+  "description": "Basic wrapper and twitter module to get social",
+  "main": "socialbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raurir/TwitterSocialBot.git"
+  },
+  "keywords": [
+    "twitter",
+    "social",
+    "follow",
+    "getfollowers",
+    "like",
+    "post"
+  ],
+  "author": "raurir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raurir/TwitterSocialBot/issues"
+  },
+  "homepage": "https://github.com/raurir/TwitterSocialBot#readme",
+  "dependencies": {
+    "promise": "^8.0.3",
+    "twitter": "^1.7.1"
+  }
+}
